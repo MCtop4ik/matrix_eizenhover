@@ -5,7 +5,7 @@ from PyQt6 import QtWidgets, QtCore, QtGui
 from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import QApplication, QLabel, QToolBar, QStatusBar, QCheckBox, QMenu, QLineEdit, QVBoxLayout, \
-    QDialog, QDialogButtonBox, QPushButton, QComboBox
+    QDialog, QDialogButtonBox, QPushButton, QComboBox, QWidget
 from PyQt6.QtWidgets import QMainWindow
 
 
@@ -28,7 +28,6 @@ class TableModel(QtCore.QAbstractTableModel):
         return len(self._data[0])
 
     def headerData(self, section, orientation, role):
-        # section is the index of the column/row.
         if role == Qt.ItemDataRole.DisplayRole:
             if orientation == Qt.Orientation.Horizontal:
                 return ['id', 'name', 'description', 'category'][section]
@@ -259,7 +258,7 @@ class EisenhowerMatrix(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle('Матрица Эйзенхауера')
-        self.setGeometry(10, 10, 500, 500)
+        self.setGeometry(10, 10, 1000, 500)
         self.database_service.start_db()
 
         self.setCentralWidget(self.widget)
@@ -363,6 +362,15 @@ class EisenhowerMatrix(QMainWindow):
     def infinity_list(self):
         """todo here will be infinity list"""
         self.category_widget('infinity_list')
+
+    def three_most_important_things(self):
+        pass
+
+    def deligation(self):
+        pass
+
+    def timetable(self):
+        pass
 
     def category_widget(self, category):
         self.clear_widget()
