@@ -5,7 +5,7 @@ from PyQt6 import QtWidgets, QtCore, QtGui
 from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import QApplication, QLabel, QToolBar, QStatusBar, QCheckBox, QMenu, QLineEdit, QVBoxLayout, \
-    QDialog, QDialogButtonBox, QPushButton, QComboBox
+    QDialog, QDialogButtonBox, QPushButton, QComboBox, QGridLayout
 from PyQt6.QtWidgets import QMainWindow
 
 
@@ -32,6 +32,29 @@ class TableModel(QtCore.QAbstractTableModel):
         if role == Qt.ItemDataRole.DisplayRole:
             if orientation == Qt.Orientation.Horizontal:
                 return ['id', 'name', 'description', 'category'][section]
+
+
+class CategoryTableModel(QtCore.QAbstractTableModel):
+    def __init__(self, data):
+        super(CategoryTableModel, self).__init__()
+        self._data = list(map(lambda arr: arr[1:3], data))
+        self.database_service = Database()
+
+    def data(self, index, role):
+        if role == Qt.ItemDataRole.DisplayRole:
+            return self._data[index.row()][index.column()]
+
+    def rowCount(self, index):
+        return len(self._data)
+
+    def columnCount(self, index):
+        return len(self._data[0])
+
+    def headerData(self, section, orientation, role):
+        # section is the index of the column/row.
+        if role == Qt.ItemDataRole.DisplayRole:
+            if orientation == Qt.Orientation.Horizontal:
+                return ['name', 'description'][section]
 
 
 class CustomDialog(QDialog):
@@ -259,52 +282,31 @@ class EisenhowerMatrix(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle('Матрица Эйзенхауера')
-        self.setGeometry(10, 10, 500, 500)
+        self.setFixedSize(700, 500)
         self.database_service.start_db()
 
         self.setCentralWidget(self.widget)
         toolbar = QToolBar("My main toolbar")
         self.addToolBar(toolbar)
 
-        button_action = QAction("&срочное / важное", self)
+        button_action = QAction("&дела", self)
         button_action.setStatusTip("This is your button")
-        button_action.triggered.connect(self.urgently_important)
+        button_action.triggered.connect(self.category_widget)
         toolbar.addAction(button_action)
 
         toolbar.addSeparator()
 
-        button_action2 = QAction("&срочное / неважное", self)
+        button_action2 = QAction("&добавить текущие дела", self)
         button_action2.setStatusTip("This is your button")
-        button_action2.triggered.connect(self.urgently_unimportant)
+        button_action2.triggered.connect(self.add_task)
         toolbar.addAction(button_action2)
 
         toolbar.addSeparator()
 
-        button_action3 = QAction("&несрочное / важное", self)
+        button_action3 = QAction("&сделанные дела", self)
         button_action3.setStatusTip("This is your button")
-        button_action3.triggered.connect(self.promptly_important)
+        button_action3.triggered.connect(self.past_tasks)
         toolbar.addAction(button_action3)
-
-        toolbar.addSeparator()
-
-        button_action4 = QAction("&несрочное / неважное", self)
-        button_action4.setStatusTip("This is your button")
-        button_action4.triggered.connect(self.promptly_unimportant)
-        toolbar.addAction(button_action4)
-
-        toolbar.addSeparator()
-
-        button_action5 = QAction("&добавить текущие дела", self)
-        button_action5.setStatusTip("This is your button")
-        button_action5.triggered.connect(self.add_task)
-        toolbar.addAction(button_action5)
-
-        toolbar.addSeparator()
-
-        button_action6 = QAction("&сделанные дела", self)
-        button_action6.setStatusTip("This is your button")
-        button_action6.triggered.connect(self.past_tasks)
-        toolbar.addAction(button_action6)
 
     def add_task(self):
         """todo here you need to add task"""
@@ -344,44 +346,79 @@ class EisenhowerMatrix(QMainWindow):
     def past_tasks(self):
         """todo here will be completed tasks"""
 
+    def category_widget(self):
+        self.clear_widget()
+        layout = QGridLayout()
+        layout.addLayout(self.urgently_important(), 0, 0)
+        layout.addLayout(self.urgently_unimportant(), 0, 1)
+        layout.addLayout(self.promptly_important(), 1, 0)
+        layout.addLayout(self.promptly_unimportant(), 1, 1)
+
+        # if category == "promptly_unimportant":
+        #     infl_button = QPushButton('Infinity List')
+        #     infl_button.clicked.connect(self.infinity_list)
+        #     layout.addWidget(infl_button)
+        self.widget.setLayout(layout)
+
     def urgently_important(self):
         """todo here will be timestamp"""
-        self.category_widget('urgently_important')
+        layout = QVBoxLayout()
+        label = QLabel("urgently_important")
+        label.show()
+        layout.addWidget(label)
+
+        layout = self.create_table_category(layout, "urgently_important")
+
+        return layout
 
     def urgently_unimportant(self):
         """todo whom I can delegate task"""
-        self.category_widget('urgently_unimportant')
+        layout = QVBoxLayout()
+        label = QLabel("urgently_unimportant")
+        label.show()
+        layout.addWidget(label)
+
+        layout = self.create_table_category(layout, "urgently_unimportant")
+
+        return layout
 
     def promptly_important(self):
         """todo 3 most important things I do today"""
-        self.category_widget('promptly_important')
+        layout = QVBoxLayout()
+        label = QLabel('promptly_important')
+        label.show()
+        layout.addWidget(label)
+
+        layout = self.create_table_category(layout, "promptly_important")
+
+        return layout
 
     def promptly_unimportant(self):
         """todo can I send them to infinity list or they will lose their relevance in near future"""
-        self.category_widget('promptly_unimportant')
-
-    def infinity_list(self):
-        """todo here will be infinity list"""
-        self.category_widget('infinity_list')
-
-    def category_widget(self, category):
-        self.clear_widget()
         layout = QVBoxLayout()
-        if category == "promptly_unimportant":
-            infl_button = QPushButton('Infinity List')
-            infl_button.clicked.connect(self.infinity_list)
-            layout.addWidget(infl_button)
+        label = QLabel('promptly_unimportant')
+        label.show()
+        layout.addWidget(label)
 
+        layout = self.create_table_category(layout, "promptly_unimportant")
+
+        return layout
+    #
+    # def infinity_list(self):
+    #     """todo here will be infinity list"""
+    #     self.category_widget('infinity_list')
+
+    def create_table_category(self, layout, category):
         data = self.database_service.select_by_category(category)
         if data:
             table = QtWidgets.QTableView()
-            model = TableModel(data)
+            model = CategoryTableModel(data)
             table.setModel(model)
             layout.addWidget(table)
         else:
             label = QLabel('No Data')
             layout.addWidget(label)
-        self.widget.setLayout(layout)
+        return layout
 
     def clear_widget(self):
         self.widget = QtWidgets.QWidget()
