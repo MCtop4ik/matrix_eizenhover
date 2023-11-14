@@ -9,21 +9,6 @@ My programm is dead simple to build:
 Why you should kill your time if you can use it earn cash! My program is the best solution to save your expensive time!
 ------------------------------------
 
-π (or pi) is one of the most important constants in mathematics and has a
-variety of interesting properties (which you can read about at [wikipedia](http://en.wikipedia.org/wiki/Pi))
-
-One of the properties that π is conjectured to have is that it is _normal_,
-which is to say that its digits are all distributed evenly, with the
-implication that it is a _disjunctive sequence_, meaning that all possible
-finite sequences of digits will be present somewhere in it. If we consider
-π in base 16 (hexadecimal) , it is trivial to see that if this conjecture
-is true, then all possible finite files must exist within π. The first
-record of this observation dates back to [2001](http://www.netfunny.com/rhf/jokes/01/Jun/pi.html).
-
-From here, it is a small leap to see that if π contains all possible files,
-why are we wasting exabytes of space storing those files, when we could just
-look them up in π!
-
 Every task that could possibly exist?
 -------------------------------------
 
