@@ -2,3 +2,5 @@ pic.jpg
 venv
 db/data.db
 log/journal.log
+
+pyinstaller --noconsole -F --data='db;db' --data='log;log' main.py
