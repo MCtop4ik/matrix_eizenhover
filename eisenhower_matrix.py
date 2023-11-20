@@ -67,7 +67,7 @@ class EisenhowerMatrix(QMainWindow):
             layout.addWidget(table)
         else:
             label = QLabel('None data')
-            pixmap = QPixmap('no_data.png').scaled(200, 200)
+            pixmap = QPixmap('assets/no_data.png').scaled(200, 200)
             label.setPixmap(pixmap)
             self.animation = QPropertyAnimation(label, b"pos")
             self.animation.setEndValue(QPoint(200, 0))
@@ -105,7 +105,7 @@ class EisenhowerMatrix(QMainWindow):
             layout.addWidget(table)
         else:
             label = QLabel('None data')
-            pixmap = QPixmap('no_data.png').scaled(200, 200)
+            pixmap = QPixmap('assets/no_data.png').scaled(200, 200)
             label.setPixmap(pixmap)
             self.animation = QPropertyAnimation(label, b"pos")
             self.animation.setEndValue(QPoint(200, 100))
@@ -215,7 +215,7 @@ class EisenhowerMatrix(QMainWindow):
             layout.addWidget(table)
         else:
             label = QLabel('None data')
-            pixmap = QPixmap('no_data.png').scaled(200, 200)
+            pixmap = QPixmap('assets/no_data.png').scaled(200, 200)
             label.setPixmap(pixmap)
             label.show()
             layout.addWidget(label)

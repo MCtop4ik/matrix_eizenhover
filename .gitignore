@@ -1,4 +1,4 @@
 pic.jpg
 venv
-data.db
-journal.log
+db/data.db
+log/journal.log

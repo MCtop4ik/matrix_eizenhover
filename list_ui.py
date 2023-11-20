@@ -27,7 +27,7 @@ class ListUI:
             layout.addWidget(table)
         else:
             label = QLabel('None data')
-            pixmap = QPixmap('no_data.png').scaled(200, 200)
+            pixmap = QPixmap('assets/no_data.png').scaled(200, 200)
             label.setPixmap(pixmap)
             label.show()
             layout.addWidget(label)
