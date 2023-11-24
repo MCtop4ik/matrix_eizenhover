@@ -1,5 +1,6 @@
 from database import Database
 from imports import *
+from PyQt6.QtWidgets import QMessageBox
 
 
 class CreateRowWindow(QDialog):
