@@ -37,9 +37,12 @@ class CreateRowWindow(QDialog):
 
     def send_data_to_database(self):
         """todo create query :done"""
-        self.database_service.add_cell(
-            self.cell_name.text(),
-            self.cell_description.text(),
-            self.database_service.get_category_id_by_name(self.cell_category.currentText())[0]
-        )
-        self.accept()
+        try:
+            self.database_service.add_cell(
+                self.cell_name.text(),
+                self.cell_description.text(),
+                self.database_service.get_category_id_by_name(self.cell_category.currentText())[0]
+            )
+            self.accept()
+        except ValueError:
+            QMessageBox.critical(self, 'Error adding', 'You re not allowed to add empty row')
